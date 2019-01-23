@@ -56,5 +56,33 @@ namespace NorthwindAjax.Controllers
                 }, JsonRequestBehavior.AllowGet);
             }
         }
+
+        [HttpPost]
+        public JsonResult Add(CategoryViewModel model)
+        {
+            try
+            {
+                var db = new NorthwindEntity();
+                db.Categories.Add(new Category()
+                {
+                    CategoryName = model.CategoryName,
+                    Description = model.Description
+                });
+                db.SaveChanges();
+                return Json(new ResponseData()
+                {
+                    message = $"{model.CategoryName} kategorisi basariyla eklendi.",
+                    success = true
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new ResponseData()
+                {
+                    message = $"Bir hata olustu {ex.Message}",
+                    success = false
+                }, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }
