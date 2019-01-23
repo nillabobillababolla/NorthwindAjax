@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+// ReSharper disable All
 
 namespace NorthwindAjax.Controllers
 {
@@ -19,7 +20,8 @@ namespace NorthwindAjax.Controllers
         public JsonResult Search(string s)
         {
             var key = s.ToLower();
-            if (key.Length < 2 && key != "*")
+
+            if (key.Length <= 2 && key != "*")
             {
                 return Json(new ResponseData()
                 {
@@ -84,5 +86,32 @@ namespace NorthwindAjax.Controllers
                 }, JsonRequestBehavior.AllowGet);
             }
         }
+        [HttpPost]
+        public JsonResult Delete(int id)
+        {
+            try
+            {
+                var db = new NorthwindEntity();
+                var cat = db.Categories.Find(id);
+                db.Categories.Remove(cat);
+                db.SaveChanges();
+                return Json(new ResponseData()
+                {
+                    message = $"{cat.CategoryName} kategorisi basariyla silindi.",
+                    success = true
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new ResponseData()
+                {
+                    message = $"Kategori silme isleminde bir hata gerceklesti: {ex.Message}",
+                    success = false
+                }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+
     }
 }
