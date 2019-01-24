@@ -112,6 +112,9 @@ namespace NorthwindAjax.Controllers
         }
 
 
-
+        public ActionResult Detail()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
